@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <!-- @css -->
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="pf-module-glasscockpit-testing/glasscockpit-testing.css"
+    />
+    <link rel="stylesheet" href="pf-test-instrument.css" />
+    <!-- @css -->
+  </head>
+
+  <body>
+    <!-- @body id="PF-TEST-INSTRUMENT" -->
+    <div id="Mainframe">
+      <div id="Electricity" state="off">
+        <div id="panel-container" class="container" state="off">
+          <div class="content"></div>
+        </div>
+        <div id="status-container" class="container" state="off">
+          <div class="content">
+            <div>bhsdfjnk</div>
+          </div>
+        </div>
+      </div>
+      <div class="pagination">
+        <div class="buttons">
+          <button id="attutideButton">Attitude indicator</button>
+          <button id="statusButton">Status</button>
+        </div>
+      </div>
+    </div>
+    <!-- @body -->
+
+    <div id="glasscockpit-testing"></div>
+
+    <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
+    <script src="pf-test-instrument-constants.js"></script>
+    <!-- @js -->
+
+    <script src="pf-module-glasscockpit-testing/glasscockpit-testing.js"></script>
+    <script src="pf-module-glasscockpit-testing/rulers.js"></script>
+
+    <script>
+      // TODO Add your variables here (and change the one below when dont needed)
+      glasscockpitTesting.addSimVar(
+        CIRCUIT,
+        "Bool",
+        0,
+        "circuit_on",
+        0,
+        1,
+        1,
+        1
+      );
+      glasscockpitTesting.addSimVar(
+        "PitchIndicator",
+        "Degrees",
+        0,
+        "pitch",
+        -100,
+        100,
+        1,
+        0
+      );
+      glasscockpitTesting.addSimVar(
+        "RollIndicator",
+        "Degrees",
+        0,
+        "circuit_on",
+        -90,
+        90,
+        1,
+        0
+      );
+      glasscockpitTesting.addSimVar(
+        "LeftFlap",
+        "Degrees",
+        0,
+        "circuit_on",
+        0,
+        42,
+        1,
+        0
+      );
+      glasscockpitTesting.addSimVar(
+        "RightFlap",
+        "Degrees",
+        0,
+        "circuit_on",
+        0,
+        42,
+        1,
+        0
+      );
+      glasscockpitTesting.addSimVar(
+        "LeftGas",
+        "Degrees",
+        0,
+        "circuit_on",
+        0,
+        900,
+        1,
+        0
+      );
+      glasscockpitTesting.addSimVar(
+        "RightGas",
+        "Degrees",
+        0,
+        "circuit_on",
+        0,
+        900,
+        1,
+        0
+      );
+    </script>
+
+    <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
+    <script src="pf-test-instrument.js"></script>
+    <script src="svg_elements_creator.js"></script>
+
+    <!-- @js -->
+  </body>
+</html>

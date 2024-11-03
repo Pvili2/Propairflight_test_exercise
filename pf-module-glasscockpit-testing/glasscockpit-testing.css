@@ -1,0 +1,80 @@
+body {
+    overflow: visible;
+}
+
+.glasscockpit-testing-frame {
+    position: fixed;
+    background-color: white;
+    left: var(--size-width);
+    top:8px;
+}
+
+#test-display {
+    left: 8px;
+    top:8px;
+    position: absolute;
+}
+
+#drag_debugger {
+    cursor: grab;
+}
+
+.glasscockpit-testing-frame table{
+    border: 1px solid black;
+    user-select: none;
+}
+
+.glasscockpit-testing-frame tr{
+    font-size: 20px;
+}
+
+.glasscockpit-testing-frame tr:nth-child(odd){
+    background-color: #cbe2ff;
+}
+
+.glasscockpit-testing-frame div{
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+}
+
+.glasscockpit-testing-image {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: var(--size-height);
+    width: var(--size-width);
+    z-index: 99999;
+    pointer-events: none;
+    user-select: none;
+}
+
+.horizontal-guide {
+    background-color: cyan;
+    opacity: 0.8;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+}
+
+.vertical-guide {
+    background-color: cyan;
+    opacity: 0.8;
+    height: 100%;
+    width: 1px;
+    top: 0;
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+}
+
+p, .textdiv {
+    pointer-events: none;
+    user-select: none;
+}
+
+.nocursor {
+    cursor: none;
+}

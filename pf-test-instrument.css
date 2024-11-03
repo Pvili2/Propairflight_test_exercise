@@ -1,0 +1,75 @@
+:root {
+  --size-width: 1024px;
+  --size-height: 768px;
+  --color-background: white;
+  --color-foreground: white;
+}
+
+.container {
+  position: relative;
+  width: var(--size-width);
+  height: var(--size-height);
+  background-color: var(--color-background);
+}
+
+.content {
+  width: var(--size-width);
+  height: var(--size-height);
+}
+
+#panel-container .content {
+  display: none;
+}
+
+#panel-container[state="on"] .content {
+  display: block;
+}
+
+#panel-container[state="off"] {
+  display: none;
+}
+
+#status-container[state="on"] .content {
+  display: block;
+}
+
+#status-container[state="off"] .content {
+  display: none;
+}
+
+#status-container[state="off"] {
+  display: none;
+}
+
+#Electricity {
+  color: var(--color-foreground);
+}
+
+.bold {
+  font-weight: bold;
+}
+.buttons {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.buttons > button {
+  text-decoration: none;
+  background-color: rgb(185, 185, 39);
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+  width: 150px;
+  height: 50px;
+  font-weight: bold;
+}
+
+.buttons > button:hover {
+  background-color: yellowgreen;
+  cursor: pointer;
+}
+
+#loading {
+  transition: height 2s ease; /* 2 másodpercig tart az animáció */
+}
