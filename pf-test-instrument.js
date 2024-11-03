@@ -29,6 +29,8 @@ class PfTestInstrument extends GlassCockpitParent {
     #rightFlap;
     #leftGasSlider;
     #rightGasSlider;
+    #leftGasLoading;
+    #rightGasLoading;
     #leftGasValue;
     #rightGasValue;
     #loading;
@@ -128,6 +130,14 @@ class PfTestInstrument extends GlassCockpitParent {
         const gapBetweenInstrument = 200;
 
         const rect3 = svgRectCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 - 70, 50, 160);
+        const leftGasLoading = svgRectCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 2, SIZE_HEIGHT / 2 - 70 + 160 - 160 * (680 / 900), 46, 0);
+        const rightGasLoading = svgRectCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument + 2, SIZE_HEIGHT / 2 - 70 + 160 - 160 * (680 / 900), 46, 0);
+        leftGasLoading.setAttribute("fill", "blue")
+        leftGasLoading.setAttribute("stroke", "")
+        leftGasLoading.setAttribute("stroke-width", "")
+        rightGasLoading.setAttribute("fill", "blue")
+        rightGasLoading.setAttribute("stroke", "")
+        rightGasLoading.setAttribute("stroke-width", "")
         const rect4 = svgRectCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 - 70, 50, 160);
         const text2 = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument - 100, SIZE_HEIGHT / 2 - 140, "EXHAUST")
         const text3 = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument - 180, SIZE_HEIGHT / 2 - 100, "GAS TEMPERATURE")
@@ -140,16 +150,47 @@ class PfTestInstrument extends GlassCockpitParent {
         leftGas.style.fontSize = "20px";
         rightGas.style.fontSize = "20px";
 
+        const sliderTop = SIZE_HEIGHT / 2 - 70; // A téglalap tetejének kezdőpontja
+        const sliderHeight = 160; // A téglalap magassága
+
+        // Fordítsd meg a számítást úgy, hogy a csúszka tetejétől indulj
+        const yellowLineValue = sliderTop + sliderHeight - (680 / 900) * sliderHeight;
+        const redLineValue = sliderTop + sliderHeight - (750 / 900) * sliderHeight;
+
+        const yellowLine = svgLineCreator(
+            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 50,
+            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 65,
+            yellowLineValue,
+            yellowLineValue,
+            "yellow",
+            2
+        );
+
+        const redLine = svgLineCreator(
+            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 50,
+            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 65,
+            redLineValue,
+            redLineValue,
+            "red",
+            2
+        );
+
         this.#leftGasValue = leftGas;
         this.#rightGasValue = rightGas;
         this.#leftGasSlider = rect3;
         this.#rightGasSlider = rect4;
+        this.#leftGasLoading = leftGasLoading;
+        this.#rightGasLoading = rightGasLoading;
         svg.appendChild(leftGas);
         svg.appendChild(rightGas);
         svg.appendChild(rect3);
         svg.appendChild(rect4);
         svg.appendChild(text2);
         svg.appendChild(text3);
+        svg.appendChild(yellowLine);
+        svg.appendChild(redLine)
+        svg.appendChild(leftGasLoading);
+        svg.appendChild(rightGasLoading);
 
     }
     statusInit() {
@@ -529,7 +570,46 @@ class PfTestInstrument extends GlassCockpitParent {
     }
 
     GasUpdate() {
+        let leftGas = Number(VarGet("LeftGas", "Degrees", 1));
+        let rightGas = Number(VarGet("RightGas", "Degrees", 1));
+        let leftGasLoadingHeight = SIZE_HEIGHT / 2 - 70 + 160 - 160 * (leftGas / 900);
+        let rightGasLoadingHeight = SIZE_HEIGHT / 2 - 70 + 160 - 160 * (rightGas / 900);
 
+        this.#leftGasLoading.setAttribute("y", leftGasLoadingHeight)
+        this.#leftGasLoading.setAttribute("height", 160 * (leftGas / 900))
+        this.#rightGasLoading.setAttribute("y", rightGasLoadingHeight)
+        this.#rightGasLoading.setAttribute("height", 160 * (rightGas / 900))
+        this.#leftGasValue.innerHTML = leftGas + " C°";
+        this.#rightGasValue.innerHTML = rightGas + " C°";
+
+        if (leftGas < 680) {
+            this.#leftGasValue.setAttribute("fill", "green")
+            this.#leftGasLoading.setAttribute("fill", "green");
+        }
+        else if (leftGas >= 680 && leftGas < 750) {
+            this.#leftGasValue.setAttribute("fill", "yellow");
+            this.#leftGasLoading.setAttribute("fill", "yellow");
+
+        } else {
+            this.#leftGasValue.setAttribute("fill", "red");
+            this.#leftGasLoading.setAttribute("fill", "red");
+
+        }
+
+        if (rightGas < 680) {
+            this.#rightGasValue.setAttribute("fill", "green")
+            this.#rightGasLoading.setAttribute("fill", "green");
+
+        }
+        else if (rightGas >= 680 && rightGas < 750) {
+            this.#rightGasValue.setAttribute("fill", "yellow");
+            this.#rightGasLoading.setAttribute("fill", "yellow");
+
+        } else {
+            this.#rightGasValue.setAttribute("fill", "red");
+            this.#rightGasLoading.setAttribute("fill", "red");
+
+        }
     }
     Update() {
         super.Update();
@@ -553,6 +633,7 @@ class PfTestInstrument extends GlassCockpitParent {
         if (electricity && this.#statusContainer.getAttribute("state") == "on") {
             this._turnOn(this.#statusContainer);
             this.FlapUpdate();
+            this.GasUpdate();
         }
 
 
