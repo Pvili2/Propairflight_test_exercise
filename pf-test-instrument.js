@@ -246,13 +246,14 @@ class PfTestInstrument extends GlassCockpitParent {
 
         const centerX = SIZE_WIDTH / 2;
         const centerY = SIZE_HEIGHT / 2;
-        const radius = SIZE_WIDTH * 0.37;
+        const radius = SIZE_WIDTH * 0.34;
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         const d = `M ${centerX - radius},${centerY} A ${radius},${radius} 0 0,1 ${centerX + radius},${centerY}`;
         path.setAttribute("d", d);
         path.setAttribute("fill", "none"); // Kitöltés nélküli
         path.setAttribute("stroke", "white"); // Fekete körvonal
         path.setAttribute("stroke-width", "5");
+
 
         svg.appendChild(path);
         const angles = [150, 120, 90, 30, 60]; // negative for left side, positive for right side
@@ -341,6 +342,13 @@ class PfTestInstrument extends GlassCockpitParent {
         }
 
         svg.appendChild(line);
+        const radius2 = SIZE_WIDTH * 0.37;
+        const overlay = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const overlayPath = `M0,0 H${SIZE_WIDTH} V${SIZE_HEIGHT} H0 V0 Z
+                            M${centerX},${centerY} m-${radius2},0 a${radius2},${radius2} 0 1,0 ${radius2 * 2},0 a${radius2},${radius2} 0 1,0 -${radius2 * 2},0 Z`;
+        overlay.setAttribute("d", overlayPath);
+        overlay.setAttribute("fill", "white");
+        svg.appendChild(overlay);
 
         this.#pitchLine = line;
         this.elemPanel.children.item(0).appendChild(svg);
@@ -574,7 +582,7 @@ class PfTestInstrument extends GlassCockpitParent {
     //param5: [] colors
     //param6: original rect height
     CalculateAndUpdateGas(engine, gasValue, maxValue, indications, colors, ogHeight) {
-        let gasLoadingRectHeight = SIZE_HEIGHT / 2 - 70 + ogHeight - ogHeight * (gasValue / maxValue);
+        const gasLoadingRectHeight = SIZE_HEIGHT / 2 - 70 + ogHeight - ogHeight * (gasValue / maxValue);
         const gasLoading = engine === 0 ? this.#leftGasLoading : this.#rightGasLoading;
         const gasLabelValue = engine === 0 ? this.#leftGasValue : this.#rightGasValue;
 

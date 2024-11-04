@@ -338,6 +338,7 @@ class GlasscockpitTesting {
 
 
 let glasscockpitTesting = new GlasscockpitTesting("glasscockpit-testing");
+let glasscockpitTesting2 = new GlasscockpitTesting("glasscockpit-testing2");
 
 // strUnit is unused, it is only there for compatibility with P3D
 // Example: VarGet("A:Indicated Altitude", "feet");
@@ -352,7 +353,7 @@ function VarSet(strSimVarNameWithPrefix, strSimVarUnit, value, multiple = 1) {
 class GlasscockpitTesting2 {
     constructor(strTestDivId) {
         this.root = document.getElementById(strTestDivId);
-        this.root.classList.add("glasscockpit-testing-frame");
+        this.root.classList.add("glasscockpit-testing-frame2");
         this._generate_tree();
         this.mapSimVarsToSliders = new Map();
     }
