@@ -340,14 +340,13 @@ class PfTestInstrument extends GlassCockpitParent {
                 svg.appendChild(text);
             }
         }
-
         svg.appendChild(line);
         const radius2 = SIZE_WIDTH * 0.37;
         const overlay = document.createElementNS("http://www.w3.org/2000/svg", "path");
         const overlayPath = `M0,0 H${SIZE_WIDTH} V${SIZE_HEIGHT} H0 V0 Z
                             M${centerX},${centerY} m-${radius2},0 a${radius2},${radius2} 0 1,0 ${radius2 * 2},0 a${radius2},${radius2} 0 1,0 -${radius2 * 2},0 Z`;
         overlay.setAttribute("d", overlayPath);
-        overlay.setAttribute("fill", "white");
+        overlay.setAttribute("fill", "gray");
         svg.appendChild(overlay);
 
         this.#pitchLine = line;
