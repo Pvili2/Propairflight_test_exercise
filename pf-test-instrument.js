@@ -172,7 +172,7 @@ class PfTestInstrument extends GlassCockpitParent {
         const leftGas = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 145, "0 C°")
         const rightGas = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 145, "0 C°")
         const leftGasText = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "E1 EGT")
-        const rightGasText = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "E1 EGT")
+        const rightGasText = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "E2 EGT")
 
         svg.appendChild(leftGasText)
         svg.appendChild(rightGasText)
