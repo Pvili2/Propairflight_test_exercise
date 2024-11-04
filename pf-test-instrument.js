@@ -102,7 +102,13 @@ class PfTestInstrument extends GlassCockpitParent {
         this.#rightFlap = rect2;
         const text1 = svgTextCreator((SIZE_WIDTH / 8) * 2 + gap - 100, SIZE_HEIGHT / 2 - 120, "FLAPS")
 
+        //flap direction text
 
+        const leftFlapDirectionText = svgTextCreator(SIZE_WIDTH / 8 + gap, SIZE_HEIGHT / 2 + 120, "LEFT");
+        leftFlapDirectionText.style.fontSize = "20px";
+
+        const rightFlapDirectionText = svgTextCreator(SIZE_WIDTH / 8 + gap + 120, SIZE_HEIGHT / 2 + 120, "RIGHT");
+        rightFlapDirectionText.style.fontSize = "20px";
         let leftX = this.#leftFlap.getAttribute("x");
         let leftY = this.#leftFlap.getAttribute("y");
         const line = svgLineCreator(Number(leftX), Number(leftX) + 50, Number(leftY), Number(leftY), "purple", 3);
@@ -123,6 +129,8 @@ class PfTestInstrument extends GlassCockpitParent {
         svg.appendChild(text1)
         svg.appendChild(line);
         svg.appendChild(line2);
+        svg.appendChild(leftFlapDirectionText)
+        svg.appendChild(rightFlapDirectionText)
     }
 
 
@@ -161,9 +169,13 @@ class PfTestInstrument extends GlassCockpitParent {
         const text2 = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument - 100, SIZE_HEIGHT / 2 - 140, "EXHAUST")
         const text3 = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument - 180, SIZE_HEIGHT / 2 - 100, "GAS TEMPERATURE")
 
-        const leftGas = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "0 C°")
-        const rightGas = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "0 C°")
+        const leftGas = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 145, "0 C°")
+        const rightGas = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 145, "0 C°")
+        const leftGasText = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "E1 EGT")
+        const rightGasText = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "E1 EGT")
 
+        svg.appendChild(leftGasText)
+        svg.appendChild(rightGasText)
         text2.style.fontSize = "30px";
         text3.style.fontSize = "30px";
         leftGas.style.fontSize = "20px";
