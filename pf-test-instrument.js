@@ -105,11 +105,11 @@ class PfTestInstrument extends GlassCockpitParent {
 
         let leftX = this.#leftFlap.getAttribute("x");
         let leftY = this.#leftFlap.getAttribute("y");
-        const line = svgLineCreator(Number(leftX), Number(leftX) + 50, Number(leftY), Number(leftY), "red", 5);
+        const line = svgLineCreator(Number(leftX), Number(leftX) + 50, Number(leftY), Number(leftY), "purple", 3);
         line.setAttribute("data-value", 0);
         let rightX = this.#rightFlap.getAttribute("x");
         let rightY = this.#rightFlap.getAttribute("y");
-        const line2 = svgLineCreator(Number(rightX), Number(rightX) + 50, Number(rightY), Number(rightY), "red", 5);
+        const line2 = svgLineCreator(Number(rightX), Number(rightX) + 50, Number(rightY), Number(rightY), "purple", 3);
         line2.setAttribute("data-value", 0);
         this.#leftLine = line;
         this.#rightLine = line2;
@@ -123,6 +123,25 @@ class PfTestInstrument extends GlassCockpitParent {
         svg.appendChild(text1)
         svg.appendChild(line);
         svg.appendChild(line2);
+    }
+
+
+    //param1: y coordinate
+    //param2: height of the rect
+    //param3: max gas value
+    //param4: line width
+    //param5: [] indications
+    //param6: [] indication colors
+    //param7: x1 coordinate
+    //param8: x2 coordinate
+    //param9: svg
+    GasCalculatedIndicationLines(y, height, maxGasValue, indications, colors, x1, x2, svg) {
+        indications.map((item, index) => {
+            let lineCalculation = y + height - (item / maxGasValue) * height;
+            let line = svgLineCreator(x1, x2, lineCalculation, lineCalculation, colors[index], 2)
+
+            svg.appendChild(line);
+        })
     }
 
     GasStatusInit(svg) {
@@ -142,8 +161,8 @@ class PfTestInstrument extends GlassCockpitParent {
         const text2 = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument - 100, SIZE_HEIGHT / 2 - 140, "EXHAUST")
         const text3 = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument - 180, SIZE_HEIGHT / 2 - 100, "GAS TEMPERATURE")
 
-        const leftGas = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "0 C˙")
-        const rightGas = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "0 C˙")
+        const leftGas = svgTextCreator((SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "0 C°")
+        const rightGas = svgTextCreator((SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument, SIZE_HEIGHT / 2 + 120, "0 C°")
 
         text2.style.fontSize = "30px";
         text3.style.fontSize = "30px";
@@ -152,28 +171,6 @@ class PfTestInstrument extends GlassCockpitParent {
 
         const sliderTop = SIZE_HEIGHT / 2 - 70; // A téglalap tetejének kezdőpontja
         const sliderHeight = 160; // A téglalap magassága
-
-        // Fordítsd meg a számítást úgy, hogy a csúszka tetejétől indulj
-        const yellowLineValue = sliderTop + sliderHeight - (680 / 900) * sliderHeight;
-        const redLineValue = sliderTop + sliderHeight - (750 / 900) * sliderHeight;
-
-        const yellowLine = svgLineCreator(
-            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 50,
-            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 65,
-            yellowLineValue,
-            yellowLineValue,
-            "yellow",
-            2
-        );
-
-        const redLine = svgLineCreator(
-            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 50,
-            (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 65,
-            redLineValue,
-            redLineValue,
-            "red",
-            2
-        );
 
         this.#leftGasValue = leftGas;
         this.#rightGasValue = rightGas;
@@ -187,10 +184,10 @@ class PfTestInstrument extends GlassCockpitParent {
         svg.appendChild(rect4);
         svg.appendChild(text2);
         svg.appendChild(text3);
-        svg.appendChild(yellowLine);
-        svg.appendChild(redLine)
         svg.appendChild(leftGasLoading);
         svg.appendChild(rightGasLoading);
+        this.GasCalculatedIndicationLines(sliderTop, sliderHeight, 900, [680, 750], ["yellow", "red"], (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 50, (SIZE_WIDTH / 8) * 3 + gap + gapBetweenInstrument + 65, svg)
+        this.GasCalculatedIndicationLines(sliderTop, sliderHeight, 900, [680, 750], ["yellow", "red"], (SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument + 50, (SIZE_WIDTH / 8) * 4 + gap + gapBetweenInstrument + 65, svg)
 
     }
     statusInit() {
@@ -569,47 +566,40 @@ class PfTestInstrument extends GlassCockpitParent {
         this.#rightLine.setAttribute("y2", Number(rightY) + calculatedRight)
     }
 
+
+    //param1: left(0) or right engine(1) 
+    //param2: gasValue
+    //param3: maxValue
+    //param4: [] indications
+    //param5: [] colors
+    //param6: original rect height
+    CalculateAndUpdateGas(engine, gasValue, maxValue, indications, colors, ogHeight) {
+        let gasLoadingRectHeight = SIZE_HEIGHT / 2 - 70 + ogHeight - ogHeight * (gasValue / maxValue);
+        const gasLoading = engine === 0 ? this.#leftGasLoading : this.#rightGasLoading;
+        const gasLabelValue = engine === 0 ? this.#leftGasValue : this.#rightGasValue;
+
+        gasLoading.setAttribute("y", gasLoadingRectHeight);
+        gasLoading.setAttribute("height", ogHeight * (gasValue / maxValue));
+        gasLabelValue.innerHTML = gasValue + " C°";
+
+        indications.map((item, index) => {
+            if (index + 1 !== indications.length && indications[index + 1] > gasValue && item <= gasValue) {
+                gasLoading.setAttribute("fill", colors[index]);
+                gasLabelValue.setAttribute("fill", colors[index]);
+            }
+            if (indications[indications.length - 1] <= gasValue) {
+                gasLoading.setAttribute("fill", colors[index]);
+                gasLabelValue.setAttribute("fill", colors[index]);
+            }
+        })
+    }
     GasUpdate() {
-        let leftGas = Number(VarGet("LeftGas", "Degrees", 1));
-        let rightGas = Number(VarGet("RightGas", "Degrees", 1));
-        let leftGasLoadingHeight = SIZE_HEIGHT / 2 - 70 + 160 - 160 * (leftGas / 900);
-        let rightGasLoadingHeight = SIZE_HEIGHT / 2 - 70 + 160 - 160 * (rightGas / 900);
+        const leftGas = Number(VarGet("LeftGas", "Degrees", 1));
+        const rightGas = Number(VarGet("RightGas", "Degrees", 1));
+        const ogRectHeight = Number(this.#leftGasSlider.getAttribute("height"));
 
-        this.#leftGasLoading.setAttribute("y", leftGasLoadingHeight)
-        this.#leftGasLoading.setAttribute("height", 160 * (leftGas / 900))
-        this.#rightGasLoading.setAttribute("y", rightGasLoadingHeight)
-        this.#rightGasLoading.setAttribute("height", 160 * (rightGas / 900))
-        this.#leftGasValue.innerHTML = leftGas + " C°";
-        this.#rightGasValue.innerHTML = rightGas + " C°";
-
-        if (leftGas < 680) {
-            this.#leftGasValue.setAttribute("fill", "green")
-            this.#leftGasLoading.setAttribute("fill", "green");
-        }
-        else if (leftGas >= 680 && leftGas < 750) {
-            this.#leftGasValue.setAttribute("fill", "yellow");
-            this.#leftGasLoading.setAttribute("fill", "yellow");
-
-        } else {
-            this.#leftGasValue.setAttribute("fill", "red");
-            this.#leftGasLoading.setAttribute("fill", "red");
-
-        }
-
-        if (rightGas < 680) {
-            this.#rightGasValue.setAttribute("fill", "green")
-            this.#rightGasLoading.setAttribute("fill", "green");
-
-        }
-        else if (rightGas >= 680 && rightGas < 750) {
-            this.#rightGasValue.setAttribute("fill", "yellow");
-            this.#rightGasLoading.setAttribute("fill", "yellow");
-
-        } else {
-            this.#rightGasValue.setAttribute("fill", "red");
-            this.#rightGasLoading.setAttribute("fill", "red");
-
-        }
+        this.CalculateAndUpdateGas(0, leftGas, 900, [0, 680, 750], ["green", "yellow", "red"], ogRectHeight);
+        this.CalculateAndUpdateGas(1, rightGas, 900, [0, 680, 750], ["green", "yellow", "red"], ogRectHeight);
     }
     Update() {
         super.Update();
