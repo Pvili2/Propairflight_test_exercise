@@ -250,8 +250,8 @@ class PfTestInstrument extends GlassCockpitParent {
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         const d = `M ${centerX - radius},${centerY} A ${radius},${radius} 0 0,1 ${centerX + radius},${centerY}`;
         path.setAttribute("d", d);
-        path.setAttribute("fill", "none"); // Kitöltés nélküli
-        path.setAttribute("stroke", "white"); // Fekete körvonal
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "white");
         path.setAttribute("stroke-width", "5");
 
 
@@ -260,10 +260,8 @@ class PfTestInstrument extends GlassCockpitParent {
         const tickLength = -30;
 
         angles.forEach(deg => {
-            // Convert degree to radians
             const angle = (deg * Math.PI) / 180;
 
-            // Tick start points (upper half of the circle)
             const x1 = centerX + Math.cos(angle) * radius;
             const y1 = centerY - Math.sin(angle) * radius;
 
@@ -279,10 +277,9 @@ class PfTestInstrument extends GlassCockpitParent {
                 const line = svgLineCreator(centerX - 20, centerX + 20, y1 + 40, y1 + 40, "yellow", 5);
                 const triangle = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
                 triangle.setAttribute("points", `${centerX},${y1 + 5} ${centerX - 20},${y1 + 35} ${centerX + 20},${y1 + 35}`); // háromszög csúcsai
-                triangle.setAttribute("fill", "yellow"); // kitöltő szín
-                triangle.setAttribute("stroke-width", "2"); // körvonal vastagsága
+                triangle.setAttribute("fill", "yellow")
+                triangle.setAttribute("stroke-width", "2");
 
-                // Add hozzá a háromszöget az SVG-hez
                 svg.appendChild(triangle);
                 svg.appendChild(line);
                 this.#attitudeCircle = line
@@ -290,19 +287,16 @@ class PfTestInstrument extends GlassCockpitParent {
 
 
         });
-        const totalLines = 41; // -100 to +100 in steps of 5
+        const totalLines = 41;
         const lineSpacing = (SIZE_HEIGHT - 2) / (totalLines - 1);
 
         for (let i = 0; i < totalLines; i++) {
             const y = i * lineSpacing;
-            const value = 100 - i * 5; // Values from +100 to -100 in steps of 5
-
+            const value = 100 - i * 5;
             let lineLength;
             if (value % 10 === 0) {
-                // Longer lines for multiples of 10
                 lineLength = SIZE_WIDTH / 6;
             } else {
-                // Shorter lines for 5-degree increments
                 lineLength = SIZE_WIDTH / 18;
             }
 
@@ -313,7 +307,7 @@ class PfTestInstrument extends GlassCockpitParent {
                 y,
                 y,
                 "white",
-                value % 10 === 0 ? 5 : 3  // Thicker lines for multiples of 10
+                value % 10 === 0 ? 5 : 3
             );
             line.classList.add("horizont");
             line.setAttribute("data-value", value);
@@ -324,7 +318,6 @@ class PfTestInstrument extends GlassCockpitParent {
             }
             svg.appendChild(line);
 
-            // Add number label only for multiples of 10
             if (value % 10 === 0) {
                 // Create the numerical value
                 const text = svgTextCreator(SIZE_WIDTH / 2 - SIZE_WIDTH / 5, y + 5, value.toString());
@@ -397,15 +390,12 @@ class PfTestInstrument extends GlassCockpitParent {
                 let originalY = parseFloat(elem.getAttribute("data-original-y")) ||
                     parseFloat(elem.getAttribute("y1"));
                 let originalValue = elem.getAttribute("data-value");
-                // If we haven't stored the original position yet, store it
                 if (!elem.getAttribute("data-original-y")) {
                     elem.setAttribute("data-original-y", originalY);
                 }
 
-                // Calculate new Y position directly from pitch
                 let newY = originalY + currentPitch;
 
-                // Update line position
                 elem.setAttribute("y1", newY);
                 elem.setAttribute("y2", newY);
 
@@ -433,7 +423,6 @@ class PfTestInstrument extends GlassCockpitParent {
                     stops[1].setAttribute("offset", 100 - b + "%")
                 }
             } else if (elem.tagName === 'text') {
-                // Handle text elements similarly
                 let originalY = parseFloat(elem.getAttribute("data-original-y")) ||
                     parseFloat(elem.getAttribute("y"));
 
