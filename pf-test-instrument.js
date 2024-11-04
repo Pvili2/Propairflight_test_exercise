@@ -309,9 +309,6 @@ class PfTestInstrument extends GlassCockpitParent {
                 "white",
                 value % 10 === 0 ? 5 : 3
             );
-            if (value == 0) {
-                line.setAttribute("stroke", "#66ff33");
-            }
             line.classList.add("horizont");
             line.setAttribute("data-value", value);
             if (value > 0 && value <= 35 || value < 0 && value >= -35) {
@@ -341,7 +338,11 @@ class PfTestInstrument extends GlassCockpitParent {
                 } else {
                     text.style.display = "none";
                 }
-                createPitchIndicatorYellowLine(svg)
+                //const line = svgLineCreator(SIZE_WIDTH / 3 + 120, SIZE_WIDTH - SIZE_WIDTH / 3 - 120, SIZE_HEIGHT / 2, SIZE_HEIGHT / 2, "yellow", 10);
+
+                //createPitchIndicatorYellowLine(svg, SIZE_WIDTH / 3, SIZE_WIDTH - SIZE_WIDTH / 3 - 120, SIZE_HEIGHT / 2, SIZE_HEIGHT / 2, SIZE_WIDTH / 3 + 120, SIZE_WIDTH / 3 + 120, SIZE_HEIGHT / 2, SIZE_HEIGHT / 2 + 20)
+                //createPitchIndicatorYellowLine(svg, SIZE_WIDTH / 3 + 200, SIZE_WIDTH - SIZE_WIDTH / 3 , SIZE_HEIGHT / 2, SIZE_HEIGHT / 2, SIZE_WIDTH / 3 + 200, SIZE_WIDTH / 3 + 200, SIZE_HEIGHT / 2, SIZE_HEIGHT / 2 + 20)
+
                 svg.appendChild(text);
                 svg.appendChild(text2);
             }
@@ -369,10 +370,10 @@ class PfTestInstrument extends GlassCockpitParent {
         document.addEventListener("keydown", (ev) => {
             switch (ev.keyCode) {
                 case 87:
-                    VarSet("PitchIndicator", "Degrees", VarGet("PitchIndicator", "Degrees", 1) + 1, 1);
+                    VarSet("PitchIndicator (WASD to move)", "Degrees", VarGet("PitchIndicator (WASD to move)", "Degrees", 1) + 1, 1);
                     break;
                 case 83:
-                    VarSet("PitchIndicator", "Degrees", VarGet("PitchIndicator", "Degrees", 1) - 1, 1);
+                    VarSet("PitchIndicator (WASD to move)", "Degrees", VarGet("PitchIndicator (WASD to move)", "Degrees", 1) - 1, 1);
                     break;
                 case 65:
                     VarSet("RollIndicator", "Degrees", VarGet("RollIndicator", "Degrees", 1) - 1, 1);
@@ -386,8 +387,8 @@ class PfTestInstrument extends GlassCockpitParent {
 
 
     getPitchIndicatorValue() {
-        let currentPitch = VarGet("PitchIndicator", "Degrees", 2) * 2;
-        let displayPitchValue = Number(VarGet("PitchIndicator", "Degrees", 1));
+        let currentPitch = VarGet("PitchIndicator (WASD to move)", "Degrees", 2) * 2;
+        let displayPitchValue = Number(VarGet("PitchIndicator (WASD to move)", "Degrees", 1));
         let currentRoll = VarGet("RollIndicator", "Degrees", 1);
         let gradient = this.#backgroundDefs.children[0];
         //[blue, brown]
