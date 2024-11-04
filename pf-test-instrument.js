@@ -289,7 +289,6 @@ class PfTestInstrument extends GlassCockpitParent {
         });
         const totalLines = 41;
         const lineSpacing = (SIZE_HEIGHT - 2) / (totalLines - 1);
-
         for (let i = 0; i < totalLines; i++) {
             const y = i * lineSpacing;
             const value = 100 - i * 5;
@@ -300,6 +299,7 @@ class PfTestInstrument extends GlassCockpitParent {
                 lineLength = SIZE_WIDTH / 18;
             }
 
+
             // Draw the line
             const line = svgLineCreator(
                 SIZE_WIDTH / 2 - lineLength,
@@ -309,6 +309,9 @@ class PfTestInstrument extends GlassCockpitParent {
                 "white",
                 value % 10 === 0 ? 5 : 3
             );
+            if (value == 0) {
+                line.setAttribute("stroke", "#66ff33");
+            }
             line.classList.add("horizont");
             line.setAttribute("data-value", value);
             if (value > 0 && value <= 35 || value < 0 && value >= -35) {
@@ -321,16 +324,26 @@ class PfTestInstrument extends GlassCockpitParent {
             if (value % 10 === 0) {
                 // Create the numerical value
                 const text = svgTextCreator(SIZE_WIDTH / 2 - SIZE_WIDTH / 5, y + 5, value.toString());
+                const text2 = svgTextCreator(SIZE_WIDTH / 2 + SIZE_WIDTH / 5 - 10, y + 5, value.toString());
+
                 text.classList.add("horizont");
                 text.setAttribute("fill", "white");
                 text.setAttribute("font-size", "14px");
+                text.setAttribute("font-weight", "bold");
                 text.setAttribute("data-value", value);
+                text2.classList.add("horizont");
+                text2.setAttribute("fill", "white");
+                text2.setAttribute("font-size", "14px");
+                text2.setAttribute("font-weight", "bold")
+                text2.setAttribute("data-value", value);
                 if (value > 0 && value <= 35 || value < 0 && value >= -35) {
                     text.style.display = "block"
                 } else {
                     text.style.display = "none";
                 }
+                createPitchIndicatorYellowLine(svg)
                 svg.appendChild(text);
+                svg.appendChild(text2);
             }
         }
         svg.appendChild(line);
@@ -374,7 +387,7 @@ class PfTestInstrument extends GlassCockpitParent {
 
     getPitchIndicatorValue() {
         let currentPitch = VarGet("PitchIndicator", "Degrees", 2) * 2;
-        let displayPitchValue = VarGet("PitchIndicator", "Degrees", 2);
+        let displayPitchValue = Number(VarGet("PitchIndicator", "Degrees", 1));
         let currentRoll = VarGet("RollIndicator", "Degrees", 1);
         let gradient = this.#backgroundDefs.children[0];
         //[blue, brown]
@@ -389,7 +402,7 @@ class PfTestInstrument extends GlassCockpitParent {
                 // Get the original y position (stored as a data attribute or calculated)
                 let originalY = parseFloat(elem.getAttribute("data-original-y")) ||
                     parseFloat(elem.getAttribute("y1"));
-                let originalValue = elem.getAttribute("data-value");
+                let originalValue = Number(elem.getAttribute("data-value"));
                 if (!elem.getAttribute("data-original-y")) {
                     elem.setAttribute("data-original-y", originalY);
                 }
@@ -399,16 +412,9 @@ class PfTestInstrument extends GlassCockpitParent {
                 elem.setAttribute("y1", newY);
                 elem.setAttribute("y2", newY);
 
-                if (originalValue > 0 && displayPitchValue >= originalValue) {
+                if (Math.abs(displayPitchValue - originalValue) < 35) {
                     elem.style.display = "block";
-                }
-                if (originalValue > 35 && displayPitchValue < originalValue) {
-                    elem.style.display = "none";
-                }
-                if (originalValue < 0 && displayPitchValue <= originalValue) {
-                    elem.style.display = "block";
-                }
-                if (originalValue < -35 && displayPitchValue > originalValue) {
+                } else {
                     elem.style.display = "none";
                 }
 
@@ -427,16 +433,9 @@ class PfTestInstrument extends GlassCockpitParent {
                     parseFloat(elem.getAttribute("y"));
 
                 let originalValue = elem.getAttribute("data-value");
-                if (originalValue > 0 && displayPitchValue >= originalValue) {
+                if (Math.abs(displayPitchValue - originalValue) < 35) {
                     elem.style.display = "block";
-                }
-                if (originalValue > 35 && displayPitchValue < originalValue) {
-                    elem.style.display = "none";
-                }
-                if (originalValue < 0 && displayPitchValue <= originalValue) {
-                    elem.style.display = "block";
-                }
-                if (originalValue < -35 && displayPitchValue > originalValue) {
+                } else {
                     elem.style.display = "none";
                 }
                 if (!elem.getAttribute("data-original-y")) {

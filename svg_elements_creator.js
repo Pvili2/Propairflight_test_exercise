@@ -33,3 +33,24 @@ function svgRectCreator(x, y, width, height, fill) {
 
     return rect;
 }
+
+function createPitchIndicatorYellowLine(svg, x1, x2, y1, y2, vx1, vx2, vy1, vy2) {
+    const horizontalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    horizontalLine.setAttribute("x1", x1);
+    horizontalLine.setAttribute("y1", x2);
+    horizontalLine.setAttribute("x2", y1);
+    horizontalLine.setAttribute("y2", y2);
+    horizontalLine.setAttribute("stroke", "yellow");
+    horizontalLine.setAttribute("stroke-width", "4");
+
+    const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    verticalLine.setAttribute("x1", vx1);
+    verticalLine.setAttribute("y1", vx2);
+    verticalLine.setAttribute("x2", vy1);
+    verticalLine.setAttribute("y2", vy2);
+    verticalLine.setAttribute("stroke", "yellow");
+    verticalLine.setAttribute("stroke-width", "4");
+
+    svg.appendChild(horizontalLine);
+    svg.appendChild(verticalLine);
+}
